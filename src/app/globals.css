@@ -1,0 +1,345 @@
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&display=swap');
+
+
+@tailwind base;
+
+@tailwind components;
+
+@tailwind utilities;
+
+
+@layer base {
+
+  :root {
+
+    --background: 280 20% 4%;
+
+    --foreground: 0 0% 98%;
+
+    --card: 280 20% 6%;
+
+    --card-foreground: 0 0% 98%;
+
+    --popover: 280 20% 6%;
+
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 135 85% 55%;
+
+    --primary-foreground: 0 0% 10%;
+
+    --secondary: 275 85% 20%;
+
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 280 20% 10%;
+
+    --muted-foreground: 280 10% 60%;
+
+    --accent: 275 85% 55%;
+
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 84% 60%;
+
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 280 30% 12%;
+
+    --input: 280 30% 10%;
+
+    --ring: 135 85% 55%;
+
+    --radius: 0.75rem;
+
+  }
+
+}
+
+
+@layer base {
+
+  * { @apply border-border selection:bg-primary/30 selection:text-primary; }
+
+
+  html {
+
+    overflow-x: hidden;
+
+    scrollbar-width: none; /* Firefox */
+
+  }
+
+  html::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+
+
+  body {
+
+    @apply text-foreground antialiased min-h-screen;
+
+    overflow-x: hidden;
+
+    background-color: #050008;
+
+    background-image:
+
+      radial-gradient(ellipse at 0% 0%,    hsla(0,100%,55%,0.15) 0px, transparent 55%),
+
+      radial-gradient(ellipse at 100% 0%,  hsla(0,0%,55%,0.15) 0px, transparent 50%),
+
+      radial-gradient(ellipse at 100% 100%,hsla(0,100%,55%,0.08) 0px, transparent 50%),
+
+      radial-gradient(ellipse at 0% 100%,  hsla(0,0%,55%,0.12) 0px, transparent 55%);
+
+  }
+
+}
+
+
+@layer components {
+
+  /* ── Glass card ── */
+
+  .glass-card {
+
+    @apply backdrop-blur-xl border shadow-[0_8px_32px_0_rgba(0,0,0,0.85)];
+
+    background: hsla(280,20%,6%,0.85);
+
+    border-color: hsla(0,100%,55%,0.15);
+
+  }
+
+
+  /* ── Joker glow ── */
+
+  .joker-glow {
+
+    box-shadow:
+
+      0 0 25px -5px  hsla(0,100%,55%,0.50),
+
+      0 0 60px -15px hsla(0,0%,55%,0.40);
+
+  }
+
+  .joker-glow-sm { box-shadow: 0 0 16px -4px hsla(0,100%,55%,0.50); }
+
+  .violet-glow   { box-shadow: 0 0 20px -5px hsla(0,0%,55%,0.55); }
+
+  .red-glow      { @apply joker-glow-sm; }
+
+  .blue-glow     { @apply violet-glow; }
+
+
+  /* ── Inputs ── */
+
+  .premium-input {
+
+    @apply bg-secondary/30 border-white/5
+
+           focus:border-primary/50 focus:ring-primary/20
+
+           transition-all duration-300 text-white;
+
+  }
+
+
+  /* ── Joker gradient text ── */
+
+  .joker-text {
+
+    @apply bg-clip-text text-transparent;
+
+    background-image: linear-gradient(135deg, hsl(0,100%,65%) 0%, hsl(0,0%,65%) 100%);
+
+  }
+
+
+  /* ── Joker stripe diagonal ── */
+
+  .joker-stripe {
+
+    background-image: repeating-linear-gradient(
+
+      -45deg,
+
+      hsla(0,100%,55%,0.08) 0px,
+
+      hsla(0,100%,55%,0.08) 2px,
+
+      transparent 2px,
+
+      transparent 14px
+
+    );
+
+  }
+
+
+  /* ── Iridescent gloss top edge ── */
+
+  .joker-gloss {
+
+    position: relative;
+
+    overflow: hidden;
+
+  }
+
+  .joker-gloss::after {
+
+    content: '';
+
+    position: absolute;
+
+    top: 0; left: 0; right: 0;
+
+    height: 1px;
+
+    background: linear-gradient(
+
+      90deg,
+
+      transparent 0%,
+
+      hsla(135,100%,75%,0.75) 30%,
+
+      hsla(275,100%,75%,0.75) 70%,
+
+      transparent 100%
+
+    );
+
+    pointer-events: none;
+
+  }
+
+
+  /* ── Joker gradient fill ── */
+
+  .joker-gradient {
+
+    background: linear-gradient(135deg, hsl(0,100%,45%) 0%, hsl(0,0%,55%) 100%);
+
+  }
+
+
+  /* ── Joker bar (progress) ── */
+
+  .joker-bar {
+
+    background: linear-gradient(90deg, hsl(0,100%,50%) 0%, hsl(0,0%,55%) 100%);
+
+  }
+
+
+  /* ── 3D card perspective wrapper ── */
+
+  .perspective-card {
+
+    perspective: 1000px;
+
+    transform-style: preserve-3d;
+
+  }
+
+}
+
+
+/* ── Floating chaos particle animation ── */
+
+@keyframes floatUp {
+
+  0%   { transform: translateY(0px) rotate(0deg); opacity: 0; }
+
+  10%  { opacity: 1; }
+
+  90%  { opacity: 0.6; }
+
+  100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
+
+}
+
+.float-particle {
+
+  animation: floatUp linear infinite;
+
+  position: absolute;
+
+  bottom: -20px;
+
+  border-radius: 50%;
+
+  pointer-events: none;
+
+}
+
+
+/* ── Chaos spin ── */
+
+@keyframes chaosSpin {
+
+  from { transform: rotate(0deg); }
+
+  to   { transform: rotate(360deg); }
+
+}
+
+
+/* ── Pulse ring ── */
+
+@keyframes pulseRing {
+
+  0%   { transform: scale(1); opacity: 0.6; }
+
+  100% { transform: scale(2); opacity: 0; }
+
+}
+
+.pulse-ring {
+
+  animation: pulseRing 2s ease-out infinite;
+
+}
+
+
+/* ── Shimmer sweep ── */
+
+@keyframes shimmer {
+
+  from { background-position: -200% center; }
+
+  to   { background-position: 200% center; }
+
+}
+
+.shimmer-text {
+
+  background: linear-gradient(
+
+    90deg,
+
+    hsl(0,100%,65%) 0%,
+
+    hsl(0,0%,65%) 30%,
+
+    hsl(0,100%,85%) 50%,
+
+    hsl(0,0%,65%) 70%,
+
+    hsl(0,100%,65%) 100%
+
+  );
+
+  background-size: 200% auto;
+
+  background-clip: text;
+
+  -webkit-background-clip: text;
+
+  -webkit-text-fill-color: transparent;
+
+  animation: shimmer 4s linear infinite;
+
+}

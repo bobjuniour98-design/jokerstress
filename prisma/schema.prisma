@@ -1,0 +1,101 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String    @id @default(cuid())
+  username     String    @unique
+  password     String
+  rank         String    @default("user")
+  premium      Boolean   @default(false)
+  plan         String?   @default("free")
+  planExpire   DateTime?
+  apiAccess    Boolean   @default(false)
+  apiToken     String?
+  balance      Float     @default(0)
+  secretKey    String?
+  referralCode String?   @unique
+  referredBy   String?
+  created      DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  lastIp       String?   // Added for Admin UI tracking
+  lastLoginAt  DateTime? // Added for Admin UI tracking
+}
+
+model Plan {
+  id             String  @id @default(cuid())
+  name           String  @unique
+  concurrent     Int     @default(0)
+  attackDuration Int     @default(0)
+  vipMethods     Boolean @default(false)
+  freeCanUse     Boolean @default(false)
+  price          Float   @default(0)     // Added for Store UI
+  premium        Boolean @default(false) // Added for Store UI
+  apiaccess      Boolean @default(false) // Added for Store UI
+  private        Boolean @default(false) // Added for Store UI
+}
+
+model Server {
+  id               String  @id @default(cuid())
+  name             String?
+  url              String?
+  layer            String?
+  type             String?
+  status           String  @default("offline")
+  endpoint         String?
+  capacity         Int     @default(0)
+  supportedMethods String?
+}
+
+model Attack {
+  id            String    @id @default(cuid())
+  userId        String?
+  serverId      String?
+  target        String?
+  methodName    String?
+  expiresAt     DateTime?
+  status        String    @default("pending")
+  layer         String    @default("7")
+  duration      Int?
+  port          String?
+  subnet        String?
+  size          String?
+  ratePerProxy  Int?
+  requestMethod String?
+}
+
+model Stats {
+  id           String @id @default(cuid())
+  TotalAttacks Int    @default(0)
+}
+
+model Method {
+  id          String  @id @default(cuid())
+  name        String? @unique
+  displayName String?
+  category    String?
+  type        String?
+  vip         Boolean @default(false)
+  freeCanUse  Boolean @default(false)
+}
+
+model News {
+  id      String   @id @default(cuid())
+  title   String
+  content String?
+  date    DateTime @default(now())
+}
+
+model Payment {
+  id        String   @id @default(cuid())
+  user      String
+  plan      String
+  amount    Float
+  status    String   @default("completed")
+  createdAt DateTime @default(now())
+}
