@@ -80,7 +80,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         source_currency: 'USD',
         source_amount: parsedAmount.toString(),
         currency,
-        email: user.email || '',
+        email: '',
         order_number: orderNumber,
         order_name: 'JokerStress Deposit',
         callback_url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/payments/webhook`,
