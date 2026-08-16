@@ -34,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const user = await prisma.user.findUnique({
-      where: { username: session.user.name },
+      where: { username: session.user.name ?? undefined },
       select: { id: true, plan: true, balance: true },
     });
 
@@ -73,7 +73,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if (planId !== undefined) {
       plan = await prisma.plan.findUnique({
-        where: { id: Number(planId) },
+        where: { id: String(planId) },
         select: { name: true, price: true, apiaccess: true },
       });
 

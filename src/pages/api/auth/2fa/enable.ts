@@ -18,7 +18,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(400).json({ message: '2FA code is required' });
   }
 
-  const userId = Number(token.id);
+  const userId = String(token.id);
   const state = getTwoFactorState(userId);
   if (!state.pendingSecret) {
     return res.status(400).json({ message: 'No pending 2FA setup found' });

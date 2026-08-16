@@ -15,7 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     await prisma.user.delete({
-      where: { id: Number(token.id) },
+      where: { id: String(token.id) },
     });
 
     res.setHeader('Set-Cookie', [

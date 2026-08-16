@@ -86,7 +86,7 @@ export const authOptions: NextAuthOptions = {
           );
 
           if (isValid) {
-            const twoFactor = getTwoFactorState(Number(user.id));
+            const twoFactor = getTwoFactorState(String(user.id));
 
             if (twoFactor.enabledSecret) {
               const providedCode = credentials.totpCode ?? '';
