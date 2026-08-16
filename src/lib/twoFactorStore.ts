@@ -3,26 +3,26 @@ type TwoFactorState = {
   pendingSecret?: string;
 };
 
-const twoFactorStore = new Map<number, TwoFactorState>();
+const twoFactorStore = new Map<string, TwoFactorState>();
 
-export function getTwoFactorState(userId: number): TwoFactorState {
+export function getTwoFactorState(userId: string): TwoFactorState {
   return twoFactorStore.get(userId) ?? {};
 }
 
-export function setPendingTwoFactorSecret(userId: number, secret: string): void {
+export function setPendingTwoFactorSecret(userId: string, secret: string): void {
   const state = getTwoFactorState(userId);
   state.pendingSecret = secret;
   twoFactorStore.set(userId, state);
 }
 
-export function enableTwoFactor(userId: number, secret: string): void {
+export function enableTwoFactor(userId: string, secret: string): void {
   const state = getTwoFactorState(userId);
   state.enabledSecret = secret;
   state.pendingSecret = undefined;
   twoFactorStore.set(userId, state);
 }
 
-export function disableTwoFactor(userId: number): void {
+export function disableTwoFactor(userId: string): void {
   const state = getTwoFactorState(userId);
   state.enabledSecret = undefined;
   state.pendingSecret = undefined;
