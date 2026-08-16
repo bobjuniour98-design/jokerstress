@@ -106,7 +106,7 @@ export default async function handler(
     }
 
     const plan = await prisma.plan.findFirst({
-      where: { name: user.plan },
+      where: { name: user.plan ?? undefined },
       select: { concurrent: true, attackDuration: true },
     });
 
@@ -164,7 +164,7 @@ export default async function handler(
       });
     }
 
-    const attackIds: number[] = [];
+    const attackIds: string[] = [];
     const failedAttacks: FailedAttack[] = [];
 
     for (let i = 0; i < concurrentsCount; i++) {
@@ -223,12 +223,12 @@ async function initiateExternalAttack(
   size: string | undefined,
   subnet: string | undefined,
   additionalParams: string | undefined,
-  user: { id: number },
+  user: { id: string },
   layer: '4' | '7',
   now: Date,
   retries: number = 2
-): Promise<number> {
-  const triedServerIds: number[] = [];
+): Promise<string> {
+  const triedServerIds: string[] = [];
 
   while (true) {
     const server = await findAvailableServer(layer, method, triedServerIds);
@@ -238,6 +238,11 @@ async function initiateExternalAttack(
       } else {
         throw new Error('No available servers at the moment');
       }
+    }
+
+    if (!server.endpoint) {
+      triedServerIds.push(server.id);
+      continue;
     }
 
     const apiUrl = server.endpoint
@@ -258,21 +263,23 @@ async function initiateExternalAttack(
 
         if (response.status >= 200 && response.status < 300) {
           const expiresAt = new Date(now.getTime() + duration * 1000);
+          
+          const attackData: any = {
+            userId: user.id,
+            layer: layer,
+            target: host,
+            port: layer === '4' ? port || null : null,
+            duration: duration,
+            methodName: method,
+            expiresAt: expiresAt,
+            status: 'active',
+            serverId: server.id,
+          };
+          
+          if (subnet) attackData.subnet = subnet;
+
           const newAttack = await prisma.attack.create({
-            data: {
-              userId: user.id,
-              layer: layer,
-              target: host,
-              port: layer === '4' ? port || null : null,
-              duration: duration,
-              methodName: method,
-              additionalParams: additionalParams
-                ? JSON.stringify({ subnet: subnet })
-                : null,
-              expiresAt: expiresAt,
-              status: 'active',
-              serverId: server.id,
-            },
+            data: attackData,
           });
 
           return newAttack.id;
