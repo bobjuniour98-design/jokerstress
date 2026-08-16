@@ -1,4 +1,4 @@
- type { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../../../lib/authOptions';
 import prisma from '../../../lib/prisma';
@@ -36,7 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const user = await prisma.user.findUnique({
-      where: { username: session.user.name },
+      where: { username: session.user.name ?? undefined },
       select: { id: true },
     });
 
@@ -50,9 +50,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(400).json({ message: 'Missing required parameter: attackId' });
     }
 
-const attack = await prisma.attack.findFirst({
-  where: { id: attackId, userId: user.id, status: 'active' },
-});
+    const attack = await prisma.attack.findFirst({
+      where: { id: attackId, userId: user.id, status: 'active' },
+    });
 
     if (!attack) {
       return res.status(404).json({ message: 'No active attack found with the provided ID' });
