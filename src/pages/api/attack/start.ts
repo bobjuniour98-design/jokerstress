@@ -76,7 +76,7 @@ export default async function handler(
     }
 
     const plan = await prisma.plan.findFirst({
-      where: { name: user.plan },
+      where: { name: user.plan ?? undefined },
       select: {
         name: true,
         concurrent: true,
