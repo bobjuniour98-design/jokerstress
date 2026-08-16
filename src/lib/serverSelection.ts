@@ -1,6 +1,10 @@
 import prisma from './prisma';
 
-export async function findAvailableServer(layer: string, methodName: string, excludeIds: number[] = []) {
+export async function findAvailableServer(
+  layer: string,
+  methodName: string,
+  excludeIds: string[] = []
+) {
   const servers = await prisma.server.findMany({
     where: {
       type: layer === '4' ? 'l4' : 'l7',
@@ -35,11 +39,15 @@ export async function findAvailableServer(layer: string, methodName: string, exc
     }
 
     const supportsMethod = methods.some(
-      (m: string) => m.toUpperCase() === needle || needle.includes(m.toUpperCase())
+      (m: string) =>
+        m.toUpperCase() === needle ||
+        needle.includes(m.toUpperCase())
     );
 
     if (!supportsMethod) {
-      console.log(`Server ${server.name} does not support ${methodName}`);
+      console.log(
+        `Server ${server.name} does not support ${methodName}`
+      );
       continue;
     }
 
@@ -47,7 +55,7 @@ export async function findAvailableServer(layer: string, methodName: string, exc
       where: {
         serverId: server.id as any,
         status: 'active',
-        expiresAt: { gt: new Date() }
+        expiresAt: { gt: new Date() },
       },
     });
 
