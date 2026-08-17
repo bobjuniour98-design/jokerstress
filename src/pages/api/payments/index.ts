@@ -18,10 +18,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     res.status(200).json({
       transactions: payments.map((payment: Payment) => ({
-        id: payment.uniqID,
-        status: payment.status,
-        amount: payment.amount,
-        coin: payment.gateway,
+        id: payment.uniqID || payment.id,
+        status: payment.status || 'completed',
+        amount: payment.amount || 0,
+        coin: payment.gateway || 'Admin', 
         date: payment.createdAt.toLocaleDateString(),
       })),
     });
