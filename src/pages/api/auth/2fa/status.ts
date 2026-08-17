@@ -12,7 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(401).json({ message: 'Unauthorized' });
   }
 
-  const userId = Number(token.id);
+  const userId = String(token.id);
   const state = getTwoFactorState(userId);
   return res.status(200).json({
     enabled: Boolean(state.enabledSecret),

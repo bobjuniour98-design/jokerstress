@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const user = await prisma.user.findUnique({
-      where: { id: Number(token.id) },
+      where: { id: String(token.id) },
       select: { password: true },
     });
 
@@ -36,7 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     await prisma.user.update({
-      where: { id: Number(token.id) },
+      where: { id: String(token.id) },
       data: { password: hashedPassword },
     });
 

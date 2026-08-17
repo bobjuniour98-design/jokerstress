@@ -36,7 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const user = await prisma.user.findUnique({
-      where: { username: session.user.name },
+      where: { username: session.user.name ?? undefined },
       select: { id: true },
     });
 
@@ -50,31 +50,61 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(400).json({ message: 'Missing required parameter: attackId' });
     }
 
-const attack = await prisma.attack.findFirst({
-  where: { id: attackId, userId: user.id, status: 'active' },
-});
+    const attack = await prisma.attack.findFirst({
+      where: { id: attackId, userId: user.id, status: 'active' },
+    });
 
     if (!attack) {
       return res.status(404).json({ message: 'No active attack found with the provided ID' });
     }
 
-    const server = await prisma.server.findFirst({
+    if (!attack.methodName || !attack.target || attack.duration == null) {
+      return res.status(400).json({ message: 'Attack is missing required parameters' });
+    }
+
+    // After the check above, these are safe
+    const methodName = attack.methodName;
+    const target = attack.target;
+    const duration = attack.duration;
+
+    const servers = await prisma.server.findMany({
       where: {
         status: 'online',
-        supportedMethods: { has: attack.methodName.toUpperCase() },
       },
-      select: { endpoint: true },
+      select: {
+        endpoint: true,
+        supportedMethods: true,
+      },
     });
 
-    if (!server) {
+    const server = servers.find((candidate) => {
+      if (!candidate.supportedMethods) return false;
+
+      try {
+        const methods = JSON.parse(candidate.supportedMethods);
+        return (
+          Array.isArray(methods) &&
+          methods.some(
+            (m: unknown) =>
+              typeof m === 'string' &&
+              m.toUpperCase() === methodName.toUpperCase()
+          )
+        );
+      } catch {
+        return false;
+      }
+    });
+
+    if (!server || !server.endpoint) {
       return res.status(503).json({ message: 'No available servers at the moment' });
     }
 
-    const subnet = (attack.additionalParams as { subnet?: string })?.subnet || '32';
+    const subnet = attack.subnet || '32';
+
     const apiUrl = server.endpoint
-      .replace('[host]', encodeURIComponent(attack.target))
+      .replace('[host]', encodeURIComponent(target))
       .replace('[port]', attack.port || '443')
-      .replace('[time]', attack.duration.toString())
+      .replace('[time]', duration.toString())
       .replace('[method]', 'STOP')
       .replace('[subnet]', subnet);
 
@@ -88,10 +118,12 @@ const attack = await prisma.attack.findFirst({
           where: { id: attack.id },
           data: { status: 'stopped' },
         });
-
         return res.status(200).json({ message: 'Attack stopped successfully' });
       } else {
-        console.error(`Server returned non-200 status while stopping attack for target ${attack.target}:`, response.status);
+        console.error(
+          `Server returned non-200 status while stopping attack for target ${target}:`,
+          response.status
+        );
         return res.status(500).json({ message: 'Failed to stop attack on server' });
       }
     } catch (error) {

@@ -73,27 +73,54 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
 
     if (!attack) {
-      return res.status(404).json({ message: 'No active attack found for the specified target and method' });
+      return res.status(404).json({
+        message: 'No active attack found for the specified target and method',
+      });
     }
 
-    const server = await prisma.server.findFirst({
-      where: {
-        status: 'online',
-        supportedMethods: { has: (method as string).toUpperCase() },
-      },
-      select: { endpoint: true },
+    if (!attack.methodName || !attack.target || attack.duration == null) {
+      return res.status(400).json({ message: 'Attack is missing required parameters' });
+    }
+
+    const methodName = attack.methodName;
+    const target = attack.target;
+    const duration = attack.duration;
+
+    // supportedMethods is a String in schema, not an array — can't use { has: ... }
+    const servers = await prisma.server.findMany({
+      where: { status: 'online' },
+      select: { endpoint: true, supportedMethods: true },
     });
 
-    if (!server) {
-      return res.status(503).json({ message: 'No available servers to stop the attack' });
+    const server = servers.find((candidate) => {
+      if (!candidate.supportedMethods) return false;
+      try {
+        const methods = JSON.parse(candidate.supportedMethods);
+        return (
+          Array.isArray(methods) &&
+          methods.some(
+            (m: unknown) =>
+              typeof m === 'string' &&
+              m.toUpperCase() === methodName.toUpperCase()
+          )
+        );
+      } catch {
+        return false;
+      }
+    });
+
+    if (!server || !server.endpoint) {
+      return res.status(503).json({ message: 'No available servers at the moment' });
     }
 
+    const subnet = attack.subnet || '32';
+
     const apiUrl = server.endpoint
-      .replace('[host]', encodeURIComponent(host as string))
-      .replace('[port]', attack.port || '')
-      .replace('[time]', attack.duration.toString())
+      .replace('[host]', encodeURIComponent(target))
+      .replace('[port]', attack.port || '443')
+      .replace('[time]', duration.toString())
       .replace('[method]', 'STOP')
-      .replace('[subnet]', attack.additionalParams?.subnet || '32');
+      .replace('[subnet]', subnet);
 
     console.log('Debug: Stop Attack API URL:', apiUrl);
 
@@ -109,7 +136,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         console.log('Debug: Attack successfully stopped and updated in database');
         return res.status(200).json({ message: 'Attack stopped successfully' });
       } else {
-        console.error('Debug: Server returned non-200 status while stopping attack:', response.status);
+        console.error(
+          'Debug: Server returned non-200 status while stopping attack:',
+          response.status
+        );
         return res.status(500).json({ message: 'Failed to stop attack on server' });
       }
     } catch (error) {

@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../lib/prisma';
 import axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
-import { Attack } from '@prisma/client';
 import { getRequestIp, isRequestIpAllowed } from '../../../lib/apiIpWhitelist';
 import { getBanInfo } from '../../../lib/adminModerationStore';
 
@@ -72,26 +71,51 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(200).json({ message: 'No active attacks to stop' });
     }
 
-    const stopPromises = activeAttacks.map(async (attack: Attack) => {
-      const server = await prisma.server.findFirst({
-        where: {
-          status: 'online',
-          supportedMethods: { has: attack.methodName.toUpperCase() },
-        },
-        select: { endpoint: true },
-      });
+    const servers = await prisma.server.findMany({
+      where: { status: 'online' },
+      select: { endpoint: true, supportedMethods: true },
+    });
 
-      if (!server) {
-        console.error(`No available server to stop attack for method: ${attack.methodName}`);
+    const stopPromises = activeAttacks.map(async (attack) => {
+      if (!attack.methodName || !attack.target || attack.duration == null) {
+        console.error(`Attack ${attack.id} is missing required parameters`);
         return null;
       }
 
+      const methodName = attack.methodName;
+      const target = attack.target;
+      const duration = attack.duration;
+
+      const server = servers.find((candidate) => {
+        if (!candidate.supportedMethods) return false;
+        try {
+          const methods = JSON.parse(candidate.supportedMethods);
+          return (
+            Array.isArray(methods) &&
+            methods.some(
+              (m: unknown) =>
+                typeof m === 'string' &&
+                m.toUpperCase() === methodName.toUpperCase()
+            )
+          );
+        } catch {
+          return false;
+        }
+      });
+
+      if (!server || !server.endpoint) {
+        console.error(`No available server to stop attack for method: ${methodName}`);
+        return null;
+      }
+
+      const subnet = attack.subnet || '32';
+
       const apiUrl = server.endpoint
-        .replace('[host]', encodeURIComponent(attack.target))
+        .replace('[host]', encodeURIComponent(target))
         .replace('[port]', attack.port || '')
-        .replace('[time]', attack.duration.toString())
+        .replace('[time]', duration.toString())
         .replace('[method]', 'STOP')
-        .replace('[subnet]', (attack.additionalParams as { subnet?: string })?.subnet || '32');
+        .replace('[subnet]', subnet);
 
       console.log('Debug: Stop All Attack API URL:', apiUrl);
 
@@ -103,13 +127,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             where: { id: attack.id },
             data: { status: 'stopped' },
           });
-
-          console.log(`Debug: Attack for target ${attack.target} stopped successfully`);
+          console.log(`Debug: Attack for target ${target} stopped successfully`);
         } else {
-          console.error(`Debug: Server returned non-200 status while stopping attack for target ${attack.target}:`, response.status);
+          console.error(
+            `Debug: Server returned non-200 status while stopping attack for target ${target}:`,
+            response.status
+          );
         }
       } catch (error) {
-        console.error(`Error stopping attack for target ${attack.target}:`, error);
+        console.error(`Error stopping attack for target ${target}:`, error);
       }
     });
 

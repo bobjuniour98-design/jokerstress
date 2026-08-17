@@ -92,10 +92,20 @@ model News {
 }
 
 model Payment {
-  id        String   @id @default(cuid())
-  user      String
-  plan      String
-  amount    Float
-  status    String   @default("completed")
-  createdAt DateTime @default(now())
+  id              String    @id @default(cuid())
+  uniqID          String?   @unique
+  user            String
+  plan            String?
+  type            String?
+  amount          Float
+  cryptoAddress   String?
+  cryptoAmount    Float?
+  cryptoURI       String?
+  gateway         String?
+  status          String    @default("PENDING")
+  createdAt       DateTime  @default(now())
+  expireTimestamp Int?
+  amountPaid      Float?
+  confirmations   Int?
+  hash            String?
 }

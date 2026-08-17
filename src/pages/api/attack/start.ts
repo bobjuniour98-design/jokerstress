@@ -76,7 +76,7 @@ export default async function handler(
     }
 
     const plan = await prisma.plan.findFirst({
-      where: { name: user.plan },
+      where: { name: user.plan ?? undefined },
       select: {
         name: true,
         concurrent: true,
@@ -227,6 +227,9 @@ async function initiateAttack(
 
   if (!method) throw new Error('Method not found');
 
+  // This guarantees a string and fixes the TypeScript error
+  const resolvedMethodName = method.name ?? methodName;
+
   if (
     (layer === '4' && method.type !== 'l4') ||
     (layer === '7' && method.type !== 'l7')
@@ -243,7 +246,7 @@ async function initiateAttack(
   const triedServerIds: string[] = [];
 
   while (true) {
-    const server = await findAvailableServer(layer, method.name, triedServerIds);
+    const server = await findAvailableServer(layer, resolvedMethodName, triedServerIds);
 
     if (!server) {
       if (triedServerIds.length > 0) {
@@ -262,8 +265,8 @@ async function initiateAttack(
       .replace('<<$port>>', encodeURIComponent(port))
       .replace('[time]', duration.toString())
       .replace('<<$duration>>', duration.toString())
-      .replace('[method]', method.name)
-      .replace('<<$method>>', method.name)
+      .replace('[method]', resolvedMethodName)
+      .replace('<<$method>>', resolvedMethodName)
       .replace('[size]', encodeURIComponent(clampedSize))
       .replace('[rate]', encodeURIComponent(additionalParams?.ratePerProxy?.toString() || '64'))
       .replace('[req_method]', encodeURIComponent(additionalParams?.requestMethod || 'GET'))
@@ -279,7 +282,6 @@ async function initiateAttack(
 
         console.log(`Server ${server.name} response:`, response.status, response.data);
 
-        // External APIs often return 200 with { error: true } when something is wrong
         if (response.data && typeof response.data === 'object' && response.data.error === true) {
           throw new Error(`External API error: ${response.data.message || 'Unknown error'}`);
         }
@@ -294,7 +296,7 @@ async function initiateAttack(
               target: target,
               port: layer === '4' ? port : null,
               duration: duration,
-              methodName: method.name,
+              methodName: resolvedMethodName,
               expiresAt: expiresAt,
               status: 'active',
             },

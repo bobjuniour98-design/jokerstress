@@ -34,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const user = await prisma.user.findUnique({
-      where: { username: session.user.name },
+      where: { username: session.user.name ?? undefined },
       select: { id: true, plan: true, balance: true },
     });
 
@@ -43,7 +43,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const { planId, customPlan, hcaptchaToken, captchaId, captchaAnswer } = req.body as {
-      planId?: number;
+      planId?: number | string;
       customPlan?: unknown;
       hcaptchaToken?: string;
       captchaId?: string;
@@ -73,7 +73,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if (planId !== undefined) {
       plan = await prisma.plan.findUnique({
-        where: { id: Number(planId) },
+        where: { id: String(planId) },
         select: { name: true, price: true, apiaccess: true },
       });
 
@@ -139,18 +139,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           const customPlanName = `Custom-${randomString}`;
 
           try {
+            // Only fields that exist on the Plan model in schema.prisma
             await prisma.plan.create({
               data: {
                 name: customPlanName,
                 price: totalPrice,
                 concurrent: concurrents,
-                cooldown: 0,
-                durationType: 'Months',
-                period: 'month',
-                privateMethods: false,
                 apiaccess: true,
-                tax: 0,
-                vipMethods: 0,
+                vipMethods: true,
                 attackDuration: maxAttackTime,
                 freeCanUse: false,
               },
@@ -184,13 +180,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         },
       });
 
-      return res.status(200).json({ message: 'Custom plan purchased successfully', plan: komaru.plan });
+      return res.status(200).json({
+        message: 'Custom plan purchased successfully',
+        plan: komaru.plan,
+      });
     } else {
       return res.status(400).json({ message: 'No valid plan selected' });
     }
   } catch (error: unknown) {
     console.error('Buy plan error:', error);
-
     if (
       error instanceof Prisma.PrismaClientKnownRequestError &&
       error.code === 'P2002' &&
@@ -199,7 +197,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     ) {
       return res.status(500).json({ message: 'A unique constraint was violated. Please try again.' });
     }
-
     return res.status(500).json({ message: 'Internal server error' });
   }
 }
