@@ -22,7 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         status: payment.status,
         amount: payment.amount,
         coin: payment.gateway,
-        date: new Date(payment.createdAt * 1000).toLocaleDateString(),
+        date: payment.createdAt.toLocaleDateString(),
       })),
     });
   } catch (error) {
