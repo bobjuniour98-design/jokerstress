@@ -105,6 +105,37 @@ export const authOptions: NextAuthOptions = {
               }
             }
 
+            // Get the real client IP when running behind Vercel.
+            const forwardedFor = req.headers?.['x-forwarded-for'];
+            const realIp = req.headers?.['x-real-ip'];
+
+            let lastIp: string | null = null;
+
+            if (typeof forwardedFor === 'string') {
+              // X-Forwarded-For can contain:
+              // client, proxy1, proxy2, ...
+              lastIp = forwardedFor
+                .split(',')[0]
+                .trim();
+            } else if (Array.isArray(forwardedFor)) {
+              lastIp = forwardedFor[0]?.trim() || null;
+            } else if (typeof realIp === 'string') {
+              lastIp = realIp.trim();
+            } else if (Array.isArray(realIp)) {
+              lastIp = realIp[0]?.trim() || null;
+            }
+
+            // Save login tracking information.
+            await prisma.user.update({
+              where: {
+                id: user.id,
+              },
+              data: {
+                lastIp,
+                lastLoginAt: new Date(),
+              },
+            });
+
             return {
               id: user.id.toString(),
               name: user.username,
