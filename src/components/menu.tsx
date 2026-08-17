@@ -82,7 +82,7 @@ export default function Menu() {
               <NavButton href="/apis"       icon={Globe}           active={pathname === '/apis'}>API</NavButton>
               <NavButton href="/store"      icon={ShoppingCart}    active={pathname === '/store'}>Market</NavButton>
               <NavButton href="/referrals"  icon={UserPlus}        active={pathname === '/referrals'}>Referrals</NavButton>
-              <ExternalNavButton href="https://t.me/Jokerstresser" icon={Send}>
+              <ExternalNavButton href="https://t.me/jokerxv2" icon={Send}>
                 Telegram
               </ExternalNavButton>
               <NavButton href="/deposit"    icon={CreditCard}      active={pathname === '/deposit'}>Wallet</NavButton>
@@ -188,7 +188,7 @@ export default function Menu() {
               <MobileNavButton href="/apis"       icon={Globe}           onClick={() => setIsMenuOpen(false)}>API</MobileNavButton>
               <MobileNavButton href="/store"      icon={ShoppingCart}    onClick={() => setIsMenuOpen(false)}>Market</MobileNavButton>
               <MobileNavButton href="/referrals"  icon={UserPlus}        onClick={() => setIsMenuOpen(false)}>Referrals</MobileNavButton>
-              <MobileExternalNavButton href="https://t.me/Jokerstresser" icon={Send} onClick={() => setIsMenuOpen(false)}>
+              <MobileExternalNavButton href="https://t.me/jokerxv2" icon={Send} onClick={() => setIsMenuOpen(false)}>
                 Telegram
               </MobileExternalNavButton>
               <MobileNavButton href="/deposit"    icon={CreditCard}      onClick={() => setIsMenuOpen(false)}>Wallet</MobileNavButton>
