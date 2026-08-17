@@ -12,7 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const payments = await prisma.payment.findMany({
-      where: { user: session.user.name },
+      where: { user: session.user.name as string },
       orderBy: { createdAt: 'desc' },
     });
 
