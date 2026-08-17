@@ -55,6 +55,8 @@ export default function AdminPage() {
     apiAccess: boolean
     premium: boolean
     banReason: string
+    lastIp?: string | null
+    lastLoginAt?: string | null
   } | null>(null)
 
   useEffect(() => {
@@ -165,6 +167,8 @@ export default function AdminPage() {
         balance: number
         apiAccess: boolean
         premium: boolean
+        lastIp?: string | null
+        lastLoginAt?: string | null
       }
       setUserForm({
         username: user.username,
@@ -175,6 +179,8 @@ export default function AdminPage() {
         apiAccess: Boolean(user.apiAccess),
         premium: Boolean(user.premium),
         banReason: data.moderation?.banReason ?? '',
+        lastIp: user.lastIp,
+        lastLoginAt: user.lastLoginAt,
       })
     } catch (e) {
       setUserForm(null)
@@ -583,6 +589,21 @@ export default function AdminPage() {
                       style={inputRowStyle}
                     />
                   </div>
+                  
+                  {/* NEW IP AND LOGIN FIELDS INSERTED HERE */}
+                  <div className="space-y-2">
+                    <Label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Last Login IP</Label>
+                    <div className="h-12 font-bold text-sm flex items-center px-3" style={{...inputRowStyle, color: '#fff'}}>
+                      {userForm.lastIp || 'No IP logged yet'}
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Last Login Date</Label>
+                    <div className="h-12 font-bold text-sm flex items-center px-3" style={{...inputRowStyle, color: '#fff'}}>
+                      {userForm.lastLoginAt ? new Date(userForm.lastLoginAt).toLocaleString() : 'Never'}
+                    </div>
+                  </div>
+                  
                   <div className="space-y-2 md:col-span-2">
                     <Label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Ban Reason</Label>
                     <Input
