@@ -1,21 +1,19 @@
 'use client'
-
 import { motion, useMotionValue, useTransform, AnimatePresence, useInView } from 'framer-motion'
 import { Shield, Users, Code, Bitcoin, Zap, Globe, ChevronDown } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRef, useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
-import { powerProofs } from '@/constants/powerproofs'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 
 function ChaosIcon({ size = 32, className = '' }: { size?: number; className?: string }) {
   return (
-    <img 
-      src="/harley.jpg" 
-      alt="Harley Logo" 
+    <img
+      src="/harley.jpg"
+      alt="Harley Logo"
       style={{ width: size, height: size }}
-      className={`object-cover rounded-full border border-green-500/30 ${className}`} 
+      className={`object-cover rounded-full border border-green-500/30 ${className}`}
     />
   )
 }
@@ -26,7 +24,6 @@ function TiltCard({ children, className = '', style = {} }: { children: React.Re
   const y = useMotionValue(0)
   const rotX = useTransform(y, [-0.5, 0.5], ['6deg', '-6deg'])
   const rotY = useTransform(x, [-0.5, 0.5], ['-6deg', '6deg'])
-
   return (
     <motion.div
       ref={ref}
@@ -47,16 +44,16 @@ function TiltCard({ children, className = '', style = {} }: { children: React.Re
 }
 
 const PARTICLES = [
-  { left: '5%',  dur: 7,  delay: 0,   size: 8,  color: 'hsl(0,100%,55%)' },
-  { left: '12%', dur: 9,  delay: 1.5, size: 5,  color: 'hsl(0,0%,55%)' },
-  { left: '20%', dur: 6,  delay: 3,   size: 10, color: 'hsl(0,100%,65%)' },
-  { left: '30%', dur: 11, delay: 0.5, size: 6,  color: 'hsl(0,0%,65%)' },
-  { left: '42%', dur: 8,  delay: 2,   size: 7,  color: 'hsl(0,100%,55%)' },
-  { left: '55%', dur: 10, delay: 4,   size: 5,  color: 'rgba(255,255,255,0.5)' },
-  { left: '65%', dur: 7,  delay: 1,   size: 9,  color: 'hsl(0,0%,55%)' },
-  { left: '75%', dur: 9,  delay: 2.5, size: 6,  color: 'hsl(0,100%,55%)' },
-  { left: '85%', dur: 6,  delay: 3.5, size: 8,  color: 'hsl(0,0%,65%)' },
-  { left: '93%', dur: 8,  delay: 0.8, size: 5,  color: 'hsl(0,100%,65%)' },
+  { left: '5%', dur: 7, delay: 0, size: 8, color: 'hsl(0,100%,55%)' },
+  { left: '12%', dur: 9, delay: 1.5, size: 5, color: 'hsl(0,0%,55%)' },
+  { left: '20%', dur: 6, delay: 3, size: 10, color: 'hsl(0,100%,65%)' },
+  { left: '30%', dur: 11, delay: 0.5, size: 6, color: 'hsl(0,0%,65%)' },
+  { left: '42%', dur: 8, delay: 2, size: 7, color: 'hsl(0,100%,55%)' },
+  { left: '55%', dur: 10, delay: 4, size: 5, color: 'rgba(255,255,255,0.5)' },
+  { left: '65%', dur: 7, delay: 1, size: 9, color: 'hsl(0,0%,55%)' },
+  { left: '75%', dur: 9, delay: 2.5, size: 6, color: 'hsl(0,100%,55%)' },
+  { left: '85%', dur: 6, delay: 3.5, size: 8, color: 'hsl(0,0%,65%)' },
+  { left: '93%', dur: 8, delay: 0.8, size: 5, color: 'hsl(0,100%,65%)' },
 ]
 
 function ChaosParticles() {
@@ -85,26 +82,24 @@ function ChaosParticles() {
   )
 }
 
-// Floating sparkle positions around the gem
 const SPARKLES = [
-  { ox: -155, oy: -70,  size: 7,  dur: 3.2, delay: 0,   color: 'hsl(0,100%,70%)' },
-  { ox:  165, oy: -100, size: 4,  dur: 4.0, delay: 0.9, color: 'hsl(0,0%,65%)' },
-  { ox:  185, oy:  50,  size: 6,  dur: 3.6, delay: 1.8, color: 'rgba(255,255,255,0.85)' },
-  { ox: -170, oy:  80,  size: 4,  dur: 5.0, delay: 2.4, color: 'hsl(0,100%,55%)' },
-  { ox:   55, oy:  165, size: 5,  dur: 4.5, delay: 0.6, color: 'hsl(0,0%,70%)' },
-  { ox:  -85, oy:  155, size: 4,  dur: 3.8, delay: 3.1, color: 'hsl(0,100%,65%)' },
-  { ox:  130, oy:  -45, size: 5,  dur: 6.0, delay: 1.3, color: 'rgba(220,255,220,0.85)' },
-  { ox:  -55, oy: -155, size: 6,  dur: 4.2, delay: 2.9, color: 'hsl(0,0%,60%)' },
-  { ox: -130, oy:  -30, size: 3,  dur: 5.5, delay: 0.4, color: 'hsl(135,100%,85%)' },
-  { ox:  110, oy:  130, size: 3,  dur: 4.8, delay: 3.7, color: 'hsl(0,0%,70%)' },
+  { ox: -155, oy: -70, size: 7, dur: 3.2, delay: 0, color: 'hsl(0,100%,70%)' },
+  { ox: 165, oy: -100, size: 4, dur: 4.0, delay: 0.9, color: 'hsl(0,0%,65%)' },
+  { ox: 185, oy: 50, size: 6, dur: 3.6, delay: 1.8, color: 'rgba(255,255,255,0.85)' },
+  { ox: -170, oy: 80, size: 4, dur: 5.0, delay: 2.4, color: 'hsl(0,100%,55%)' },
+  { ox: 55, oy: 165, size: 5, dur: 4.5, delay: 0.6, color: 'hsl(0,0%,70%)' },
+  { ox: -85, oy: 155, size: 4, dur: 3.8, delay: 3.1, color: 'hsl(0,100%,65%)' },
+  { ox: 130, oy: -45, size: 5, dur: 6.0, delay: 1.3, color: 'rgba(220,255,220,0.85)' },
+  { ox: -55, oy: -155, size: 6, dur: 4.2, delay: 2.9, color: 'hsl(0,0%,60%)' },
+  { ox: -130, oy: -30, size: 3, dur: 5.5, delay: 0.4, color: 'hsl(135,100%,85%)' },
+  { ox: 110, oy: 130, size: 3, dur: 4.8, delay: 3.7, color: 'hsl(0,0%,70%)' },
 ]
 
-// 4 corner "light glint" cross sparkles at gem vertices
 const GLINTS = [
-  { ox: -10, oy: -155 }, // top apex
-  { ox: 115, oy:  -75 }, // upper-right
-  { ox: 115, oy:   75 }, // lower-right
-  { ox:   0, oy:  155 }, // bottom apex
+  { ox: -10, oy: -155 },
+  { ox: 115, oy: -75 },
+  { ox: 115, oy: 75 },
+  { ox: 0, oy: 155 },
 ]
 
 function GlintStar({ x, y, delay }: { x: number; y: number; delay: number }) {
@@ -121,7 +116,6 @@ function GlintStar({ x, y, delay }: { x: number; y: number; delay: number }) {
         pointerEvents: 'none',
       }}
     >
-      {/* 4-pointed star cross */}
       <div style={{ position: 'absolute', width: 2, height: 18, borderRadius: 1, background: 'rgba(255,255,255,0.90)', boxShadow: '0 0 6px 2px rgba(200,255,200,0.70)' }} />
       <div style={{ position: 'absolute', width: 18, height: 2, borderRadius: 1, background: 'rgba(255,255,255,0.90)', boxShadow: '0 0 6px 2px rgba(200,255,200,0.70)' }} />
     </motion.div>
@@ -134,14 +128,11 @@ function Hero3DChaos() {
       className="relative flex items-center justify-center select-none"
       style={{ width: 460, height: 500 }}
     >
-      {/* Ambient glow cloud */}
       <div style={{
         position: 'absolute', inset: 0, pointerEvents: 'none',
         background: 'radial-gradient(ellipse at 50% 48%, hsla(0,100%,55%,0.22) 0%, hsla(0,0%,55%,0.10) 45%, transparent 70%)',
         filter: 'blur(28px)',
       }} />
-
-      {/* Floating sparkle dots */}
       {SPARKLES.map((s, i) => (
         <motion.div
           key={i}
@@ -157,27 +148,19 @@ function Hero3DChaos() {
           }}
         />
       ))}
-
-      {/* Light glint crosses at gem vertices */}
       {GLINTS.map((g, i) => (
         <GlintStar key={i} x={g.ox} y={g.oy} delay={i * 0.7} />
       ))}
-
-      {/* ── MAIN GEM ── float + rock */}
       <motion.div
         animate={{ y: [-10, 10, -10] }}
         transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
         style={{ position: 'relative', zIndex: 10 }}
       >
-        {/* CSS 3D perspective wrapper for rock animation */}
         <motion.div
           animate={{ rotateY: [-14, 14, -14] }}
           transition={{ duration: 6.5, repeat: Infinity, ease: 'easeInOut' }}
           style={{ perspective: '700px', display: 'block' }}
         >
-          {/*
-            ── JOKER GEM SVG ──
-          */}
           <svg
             viewBox="0 0 400 400"
             width="300" height="300"
@@ -185,82 +168,75 @@ function Hero3DChaos() {
           >
             <defs>
               <linearGradient id="gF6" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%"   stopColor="hsl(135,100%,90%)" />
+                <stop offset="0%" stopColor="hsl(135,100%,90%)" />
                 <stop offset="100%" stopColor="hsl(0,100%,65%)" />
               </linearGradient>
               <linearGradient id="gF1" x1="100%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%"   stopColor="hsl(0,100%,75%)" />
+                <stop offset="0%" stopColor="hsl(0,100%,75%)" />
                 <stop offset="100%" stopColor="hsl(0,100%,50%)" />
               </linearGradient>
               <linearGradient id="gF2" x1="100%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%"   stopColor="hsl(0,0%,65%)" />
+                <stop offset="0%" stopColor="hsl(0,0%,65%)" />
                 <stop offset="100%" stopColor="hsl(0,0%,45%)" />
               </linearGradient>
               <linearGradient id="gF3" x1="100%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%"   stopColor="hsl(0,0%,50%)" />
+                <stop offset="0%" stopColor="hsl(0,0%,50%)" />
                 <stop offset="100%" stopColor="hsl(0,0%,30%)" />
               </linearGradient>
               <linearGradient id="gF4" x1="0%" y1="100%" x2="100%" y2="0%">
-                <stop offset="0%"   stopColor="hsl(0,0%,20%)" />
+                <stop offset="0%" stopColor="hsl(0,0%,20%)" />
                 <stop offset="100%" stopColor="hsl(0,0%,40%)" />
               </linearGradient>
               <linearGradient id="gF5" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%"   stopColor="hsl(0,0%,55%)" />
+                <stop offset="0%" stopColor="hsl(0,0%,55%)" />
                 <stop offset="100%" stopColor="hsl(0,0%,35%)" />
               </linearGradient>
               <linearGradient id="gOutline" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%"   stopColor="hsla(0,100%,88%,0.80)" />
-                <stop offset="50%"  stopColor="hsla(0,0%,75%,0.40)" />
+                <stop offset="0%" stopColor="hsla(0,100%,88%,0.80)" />
+                <stop offset="50%" stopColor="hsla(0,0%,75%,0.40)" />
                 <stop offset="100%" stopColor="hsla(0,0%,60%,0.20)" />
               </linearGradient>
             </defs>
-
             <polygon
-              points="200,48 320,128 320,262 200,352 80,262 80,128"
+              points="200,48 320,128 320,272 200,352 80,272 80,128"
               fill="hsla(0,100%,55%,0.16)"
               style={{ filter: 'blur(22px)' }}
             />
             <polygon
-              points="200,48 320,128 320,262 200,352 80,262 80,128"
+              points="200,48 320,128 320,272 200,352 80,272 80,128"
               fill="none"
               stroke="hsla(0,100%,65%,0.30)"
               strokeWidth="24"
               strokeLinejoin="round"
               style={{ filter: 'blur(14px)' }}
             />
-
-            <polygon points="200,200 200,48 320,128"  fill="url(#gF1)" />
-            <polygon points="200,200 320,128 320,262" fill="url(#gF2)" />
-            <polygon points="200,200 320,262 200,352" fill="url(#gF3)" />
-            <polygon points="200,200 200,352 80,262"  fill="url(#gF4)" />
-            <polygon points="200,200 80,262 80,128"   fill="url(#gF5)" />
-            <polygon points="200,200 80,128 200,48"   fill="url(#gF6)" />
-
-            {([[200,48],[320,128],[320,262],[200,352],[80,262],[80,128]] as [number,number][]).map(([vx,vy], i) => (
+            <polygon points="200,200 200,48 320,128" fill="url(#gF1)" />
+            <polygon points="200,200 320,128 320,272" fill="url(#gF2)" />
+            <polygon points="200,200 320,272 200,352" fill="url(#gF3)" />
+            <polygon points="200,200 200,352 80,272" fill="url(#gF4)" />
+            <polygon points="200,200 80,272 80,128" fill="url(#gF5)" />
+            <polygon points="200,200 80,128 200,48" fill="url(#gF6)" />
+            {([[200,48],[320,128],[320,272],[200,352],[80,272],[80,128]] as [number,number][]).map(([vx,vy], i) => (
               <line key={i}
                 x1={200} y1={200} x2={vx} y2={vy}
                 stroke="rgba(255,255,255,0.16)" strokeWidth="1.5"
               />
             ))}
-
             <polygon
-              points="200,48 320,128 320,262 200,352 80,262 80,128"
+              points="200,48 320,128 320,272 200,352 80,272 80,128"
               fill="none"
               stroke="url(#gOutline)"
               strokeWidth="2"
               strokeLinejoin="round"
             />
-
             <ellipse cx="142" cy="106" rx="46" ry="30"
               fill="rgba(255,255,255,0.72)" transform="rotate(-30, 142, 106)" />
             <ellipse cx="132" cy="98" rx="22" ry="13"
               fill="rgba(255,255,255,0.90)" transform="rotate(-30, 132, 98)" />
-
             <ellipse cx="270" cy="195" rx="24" ry="13"
               fill="hsla(0,0%,88%,0.40)" transform="rotate(16, 270, 195)" />
-
             <polygon
-              points="200,48 320,128 320,262 200,352 80,262 80,128"
+              points="200,48 320,128 320,272 200,352 80,272 80,128"
               fill="none"
               stroke="rgba(190,255,190,0.10)"
               strokeWidth="40"
@@ -269,8 +245,6 @@ function Hero3DChaos() {
           </svg>
         </motion.div>
       </motion.div>
-
-      {/* Ground glow */}
       <div style={{
         position: 'absolute', bottom: 12, left: '50%',
         transform: 'translateX(-50%)',
@@ -300,13 +274,11 @@ function FadeIn({ children, delay = 0, className = '' }: { children: React.React
 
 export default function LandingPage() {
   const [openFaq, setOpenFaq] = useState<string | undefined>()
-
   return (
     <div className="min-h-screen relative overflow-x-hidden text-gray-100" style={{ backgroundColor: '#050008' }}>
       <ChaosParticles />
-
       <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute top-[-15%] left-[-5%] w-[60%] h-[60%] rounded-full blur-[200px]"  style={{ background: 'hsla(0,100%,55%,0.14)' }} />
+        <div className="absolute top-[-15%] left-[-5%] w-[60%] h-[60%] rounded-full blur-[200px]" style={{ background: 'hsla(0,100%,55%,0.14)' }} />
         <div className="absolute bottom-[-15%] right-[-5%] w-[60%] h-[60%] rounded-full blur-[200px]" style={{ background: 'hsla(0,0%,55%,0.10)' }} />
         <div className="absolute top-[30%] right-[20%] w-[25%] h-[25%] rounded-full blur-[130px]" style={{ background: 'hsla(0,100%,55%,0.07)' }} />
       </div>
@@ -331,13 +303,11 @@ export default function LandingPage() {
               Joker<span className="shimmer-text">Stress</span>
             </span>
           </motion.div>
-
           <motion.div className="hidden lg:flex items-center gap-10" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
             {[
-              { label: 'Services',    href: '#services' },
-              { label: 'Pricing',     href: '#pricing' },
-              { label: 'PowerProofs', href: '#powerproofs' },
-              { label: 'FAQ',         href: '#faq' },
+              { label: 'Services', href: '#services' },
+              { label: 'Pricing', href: '#pricing' },
+              { label: 'FAQ', href: '#faq' },
             ].map((item) => (
               <Link key={item.label} href={item.href}
                 className="text-[10px] font-black uppercase tracking-[0.25em] text-gray-500 hover:text-white transition-colors relative group"
@@ -347,7 +317,6 @@ export default function LandingPage() {
               </Link>
             ))}
           </motion.div>
-
           <motion.div className="flex items-center gap-4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }}>
             <Link href="/signin">
               <motion.button
@@ -389,9 +358,7 @@ export default function LandingPage() {
         {/* Hero */}
         <section className="relative min-h-screen flex items-center overflow-hidden">
           <div className="absolute inset-0 joker-stripe opacity-40 pointer-events-none" />
-
           <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center py-24">
-            {/* Text */}
             <div className="space-y-10 relative z-10">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -403,7 +370,6 @@ export default function LandingPage() {
                 <div className="w-2 h-2 rounded-full animate-ping" style={{ background: 'hsl(0,100%,55%)' }} />
                 <span className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Next-Gen Tactical Infrastructure Live</span>
               </motion.div>
-
               <div className="space-y-1 font-black uppercase" style={{ letterSpacing: '-0.03em', lineHeight: 0.87 }}>
                 <div className="overflow-hidden">
                   <motion.div
@@ -428,7 +394,6 @@ export default function LandingPage() {
                   </motion.div>
                 </div>
               </div>
-
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -437,7 +402,6 @@ export default function LandingPage() {
               >
                 Elite Layer 4 &amp; Layer 7 tactical operations. Orchestrate high-concurrency diagnostic sequences with millisecond precision on our global edge network.
               </motion.p>
-
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -471,7 +435,6 @@ export default function LandingPage() {
                   </motion.button>
                 </Link>
               </motion.div>
-
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -480,8 +443,8 @@ export default function LandingPage() {
               >
                 {[
                   { value: '+4 TBPS', label: 'Network Power' },
-                  { value: '99.9%',   label: 'Uptime SLA' },
-                  { value: '50+',     label: 'Global Nodes' },
+                  { value: '99.9%', label: 'Uptime SLA' },
+                  { value: '50+', label: 'Global Nodes' },
                 ].map((s, i) => (
                   <div key={i}>
                     <p className="text-2xl font-black bg-clip-text text-transparent" style={{ backgroundImage: 'linear-gradient(135deg,hsl(0,100%,60%),hsl(0,0%,60%))' }}>{s.value}</p>
@@ -490,8 +453,6 @@ export default function LandingPage() {
                 ))}
               </motion.div>
             </div>
-
-            {/* 3D Chaos Gem */}
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -502,7 +463,6 @@ export default function LandingPage() {
               <Hero3DChaos />
             </motion.div>
           </div>
-
           <motion.div
             className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40"
             animate={{ y: [0, 8, 0] }}
@@ -522,13 +482,12 @@ export default function LandingPage() {
             </h2>
             <p className="text-gray-500 text-xs font-black uppercase tracking-[0.25em]">What makes us the best</p>
           </FadeIn>
-
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: <Bitcoin className="h-6 w-6" />, title: 'Stealth Payments',   desc: 'Secure cryptographic asset transfers ensure total operational anonymity.' },
-              { icon: <Shield  className="h-6 w-6" />, title: 'Hardened Security',  desc: 'Encrypted communication channels across our distributed global cluster.' },
-              { icon: <Users   className="h-6 w-6" />, title: 'Elite Intelligence', desc: '24/7 tactical support from our network optimization specialists.' },
-              { icon: <Code    className="h-6 w-6" />, title: 'Vector Precision',   desc: 'Advanced bypass techniques engineered for modern network defense.' },
+              { icon: <Bitcoin className="h-6 w-6" />, title: 'Stealth Payments', desc: 'Secure cryptographic asset transfers ensure total operational anonymity.' },
+              { icon: <Shield className="h-6 w-6" />, title: 'Hardened Security', desc: 'Encrypted communication channels across our distributed global cluster.' },
+              { icon: <Users className="h-6 w-6" />, title: 'Elite Intelligence', desc: '24/7 tactical support from our network optimization specialists.' },
+              { icon: <Code className="h-6 w-6" />, title: 'Vector Precision', desc: 'Advanced bypass techniques engineered for modern network defense.' },
             ].map((f, i) => (
               <FadeIn key={i} delay={i * 0.08}>
                 <TiltCard
@@ -568,10 +527,10 @@ export default function LandingPage() {
           <div className="max-w-5xl mx-auto px-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
               {[
-                { value: '+4 TBPS',   label: 'Network Capacity' },
-                { value: '10K+',      label: 'Active Users' },
-                { value: '50+',       label: 'Server Nodes' },
-                { value: '99.9%',     label: 'Uptime Guarantee' },
+                { value: '+4 TBPS', label: 'Network Capacity' },
+                { value: '10K+', label: 'Active Users' },
+                { value: '50+', label: 'Server Nodes' },
+                { value: '99.9%', label: 'Uptime Guarantee' },
               ].map((s, i) => (
                 <FadeIn key={i} delay={i * 0.1}>
                   <p className="text-4xl font-black shimmer-text mb-2">{s.value}</p>
@@ -592,12 +551,40 @@ export default function LandingPage() {
               </h2>
               <p className="text-gray-500 font-medium uppercase tracking-[0.2em] text-xs">Choose your tactical deployment tier</p>
             </FadeIn>
-
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {[
-                { name: 'Tactical Lite',   price: '30',   features: ['600s Operation Time', '2 Parallel Signals', 'Priority Hub Access'],                                                popular: false },
-                { name: 'Operational Pro', price: '165',  features: ['2400s Operation Time', '8 Parallel Signals', 'API Interface Access', 'Full Tactical Support'],                      popular: true },
-                { name: 'Apex Strategic',  price: '1000', features: ['8500s Operation Time', '50 Parallel Signals', 'Full API Access', 'Direct Technical Uplink'],                        popular: false },
+                {
+                  name: 'Basic',
+                  price: '25',
+                  features: [
+                    '1200s Operation Time',
+                    '1 Concurrent Attack',
+                    'Standard Support',
+                  ],
+                  popular: false,
+                },
+                {
+                  name: 'VIP',
+                  price: '50',
+                  features: [
+                    '2400s Operation Time',
+                    '5 Concurrent Attacks',
+                    'VIP Methods',
+                    'Priority Support',
+                  ],
+                  popular: true,
+                },
+                {
+                  name: 'Harley',
+                  price: '75',
+                  features: [
+                    '2800s Operation Time',
+                    '35 Concurrent Attacks',
+                    'VIP Methods',
+                    'Priority Support',
+                  ],
+                  popular: false,
+                },
               ].map((p, i) => (
                 <FadeIn key={i} delay={i * 0.1}>
                   <TiltCard
@@ -621,7 +608,6 @@ export default function LandingPage() {
                         </motion.div>
                       </>
                     )}
-
                     <div className="relative z-10 space-y-2 mb-6">
                       <h4 className="text-xs font-black uppercase tracking-[0.3em] shimmer-text">{p.name}</h4>
                       <div className="flex items-baseline gap-2">
@@ -629,9 +615,7 @@ export default function LandingPage() {
                         <span className="text-xs font-bold text-gray-600 uppercase tracking-widest">/ Mo</span>
                       </div>
                     </div>
-
                     <div className="h-px my-6 relative z-10" style={{ background: 'hsla(0,100%,55%,0.12)' }} />
-
                     <ul className="relative z-10 space-y-5 flex-1">
                       {p.features.map((feat, j) => (
                         <li key={j} className="flex items-center gap-4 text-sm font-bold text-gray-400">
@@ -642,7 +626,6 @@ export default function LandingPage() {
                         </li>
                       ))}
                     </ul>
-
                     <Link href="/signup" className="mt-10 relative z-10">
                       <motion.button
                         whileHover={{ scale: 1.02 }}
@@ -666,40 +649,6 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* PowerProofs */}
-        <section id="powerproofs" className="py-24 max-w-7xl mx-auto px-6">
-          <FadeIn className="space-y-4 text-center mb-12">
-            <h2 className="text-4xl font-black uppercase tracking-tighter">
-              Power<span className="shimmer-text">Proofs</span>
-            </h2>
-            <p className="text-gray-500 font-medium uppercase tracking-[0.2em] text-xs">JokerStress PowerProofs +4TBPS Network</p>
-          </FadeIn>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {powerProofs.map((proof, i) => (
-              <FadeIn key={`${proof.title}-${i}`} delay={i * 0.06}>
-                <motion.article
-                  whileHover={{ y: -4 }}
-                  transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-                  className="overflow-hidden rounded-2xl joker-gloss"
-                  style={{ background: 'hsla(280,20%,6%,0.82)', border: '1px solid hsla(0,100%,55%,0.09)' }}
-                >
-                  <div className="aspect-video bg-black/40 overflow-hidden">
-                    <Image src={proof.imageUrl} alt={proof.title} width={1200} height={675}
-                      className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
-                      loading="lazy" unoptimized />
-                  </div>
-                  <div className="p-5 space-y-1">
-                    <h3 className="text-white font-black tracking-tight">{proof.title}</h3>
-                    <p className="text-gray-400 text-xs font-medium">{proof.subtitle}</p>
-                    <p className="text-[10px] font-black uppercase tracking-widest pt-1" style={{ color: 'hsl(0,100%,55%)' }}>{proof.dateText}</p>
-                  </div>
-                </motion.article>
-              </FadeIn>
-            ))}
-          </div>
-        </section>
-
         {/* FAQ */}
         <section id="faq" className="py-32 max-w-3xl mx-auto px-6">
           <FadeIn className="text-center mb-16">
@@ -711,8 +660,8 @@ export default function LandingPage() {
           <Accordion type="single" collapsible value={openFaq} onValueChange={setOpenFaq} className="space-y-4">
             {[
               { q: 'Platform Mission Objective', a: 'We provide specialized infrastructure for high-intensity network diagnostic sequences. Our systems enable administrators to stress-test their network perimeter against advanced tactical loads.' },
-              { q: 'Deployment Timeline',        a: 'All acquisition sequences are automated. Confirmed cryptographic transfers typically grant operational access within 300-600 seconds.' },
-              { q: 'Strategic Advantages',       a: 'Strategic-tier membership provides a 100% amplification in vector intensity, direct specialist uplink, and access to proprietary tactical methods.' },
+              { q: 'Deployment Timeline', a: 'All acquisition sequences are automated. Confirmed cryptographic transfers typically grant operational access within 300-600 seconds.' },
+              { q: 'Strategic Advantages', a: 'Strategic-tier membership provides a 100% amplification in vector intensity, direct specialist uplink, and access to proprietary tactical methods.' },
             ].map((faq, i) => (
               <AccordionItem key={i} value={`item-${i}`}
                 className="px-6 rounded-2xl overflow-hidden joker-gloss"
