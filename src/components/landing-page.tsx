@@ -159,90 +159,16 @@ function Hero3DChaos() {
         <motion.div
           animate={{ rotateY: [-14, 14, -14] }}
           transition={{ duration: 6.5, repeat: Infinity, ease: 'easeInOut' }}
-          style={{ perspective: '700px', display: 'block' }}
+          style={{ perspective: '700px', display: 'flex', justifyContent: 'center' }}
         >
-          <svg
-            viewBox="0 0 400 400"
-            width="300" height="300"
-            style={{ overflow: 'visible', display: 'block' }}
-          >
-            <defs>
-              <linearGradient id="gF6" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="hsl(135,100%,90%)" />
-                <stop offset="100%" stopColor="hsl(0,100%,65%)" />
-              </linearGradient>
-              <linearGradient id="gF1" x1="100%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="hsl(0,100%,75%)" />
-                <stop offset="100%" stopColor="hsl(0,100%,50%)" />
-              </linearGradient>
-              <linearGradient id="gF2" x1="100%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="hsl(0,0%,65%)" />
-                <stop offset="100%" stopColor="hsl(0,0%,45%)" />
-              </linearGradient>
-              <linearGradient id="gF3" x1="100%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="hsl(0,0%,50%)" />
-                <stop offset="100%" stopColor="hsl(0,0%,30%)" />
-              </linearGradient>
-              <linearGradient id="gF4" x1="0%" y1="100%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="hsl(0,0%,20%)" />
-                <stop offset="100%" stopColor="hsl(0,0%,40%)" />
-              </linearGradient>
-              <linearGradient id="gF5" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="hsl(0,0%,55%)" />
-                <stop offset="100%" stopColor="hsl(0,0%,35%)" />
-              </linearGradient>
-              <linearGradient id="gOutline" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="hsla(0,100%,88%,0.80)" />
-                <stop offset="50%" stopColor="hsla(0,0%,75%,0.40)" />
-                <stop offset="100%" stopColor="hsla(0,0%,60%,0.20)" />
-              </linearGradient>
-            </defs>
-            <polygon
-              points="200,48 320,128 320,272 200,352 80,272 80,128"
-              fill="hsla(0,100%,55%,0.16)"
-              style={{ filter: 'blur(22px)' }}
-            />
-            <polygon
-              points="200,48 320,128 320,272 200,352 80,272 80,128"
-              fill="none"
-              stroke="hsla(0,100%,65%,0.30)"
-              strokeWidth="24"
-              strokeLinejoin="round"
-              style={{ filter: 'blur(14px)' }}
-            />
-            <polygon points="200,200 200,48 320,128" fill="url(#gF1)" />
-            <polygon points="200,200 320,128 320,272" fill="url(#gF2)" />
-            <polygon points="200,200 320,272 200,352" fill="url(#gF3)" />
-            <polygon points="200,200 200,352 80,272" fill="url(#gF4)" />
-            <polygon points="200,200 80,272 80,128" fill="url(#gF5)" />
-            <polygon points="200,200 80,128 200,48" fill="url(#gF6)" />
-            {([[200,48],[320,128],[320,272],[200,352],[80,272],[80,128]] as [number,number][]).map(([vx,vy], i) => (
-              <line key={i}
-                x1={200} y1={200} x2={vx} y2={vy}
-                stroke="rgba(255,255,255,0.16)" strokeWidth="1.5"
-              />
-            ))}
-            <polygon
-              points="200,48 320,128 320,272 200,352 80,272 80,128"
-              fill="none"
-              stroke="url(#gOutline)"
-              strokeWidth="2"
-              strokeLinejoin="round"
-            />
-            <ellipse cx="142" cy="106" rx="46" ry="30"
-              fill="rgba(255,255,255,0.72)" transform="rotate(-30, 142, 106)" />
-            <ellipse cx="132" cy="98" rx="22" ry="13"
-              fill="rgba(255,255,255,0.90)" transform="rotate(-30, 132, 98)" />
-            <ellipse cx="270" cy="195" rx="24" ry="13"
-              fill="hsla(0,0%,88%,0.40)" transform="rotate(16, 270, 195)" />
-            <polygon
-              points="200,48 320,128 320,272 200,352 80,272 80,128"
-              fill="none"
-              stroke="rgba(190,255,190,0.10)"
-              strokeWidth="40"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <img 
+            src="/harley2.jpg" 
+            alt="Harley Quinn"
+            className="w-[300px] h-[300px] object-cover rounded-2xl border border-red-500/20 relative z-10"
+            style={{
+               filter: 'drop-shadow(0px 0px 35px rgba(255, 0, 0, 0.65)) drop-shadow(0px 0px 10px rgba(255, 255, 255, 0.2))'
+            }}
+          />
         </motion.div>
       </motion.div>
       <div style={{
@@ -442,7 +368,7 @@ export default function LandingPage() {
                 className="flex gap-10 pt-2"
               >
                 {[
-                  { value: '+4 TBPS', label: 'Network Power' },
+                  { value: '+1.5 TBPS', label: 'Network Power' },
                   { value: '99.9%', label: 'Uptime SLA' },
                   { value: '50+', label: 'Global Nodes' },
                 ].map((s, i) => (
@@ -527,7 +453,7 @@ export default function LandingPage() {
           <div className="max-w-5xl mx-auto px-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
               {[
-                { value: '+4 TBPS', label: 'Network Capacity' },
+                { value: '+1.5 TBPS', label: 'Network Capacity' },
                 { value: '10K+', label: 'Active Users' },
                 { value: '50+', label: 'Server Nodes' },
                 { value: '99.9%', label: 'Uptime Guarantee' },
