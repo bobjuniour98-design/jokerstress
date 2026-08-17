@@ -71,10 +71,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     await prisma.payment.update({
       where: { uniqID: txnId },
-      data: {
+       data: {
         status: status,
-        amountPaid: isNaN(amountPaid) ? payment.amountPaid : amountPaid,
-        confirmations: isNaN(confirmations) ? payment.confirmations : confirmations,
+        amountPaid: typeof amountPaid === 'number' && !isNaN(amountPaid) ? amountPaid : payment.amountPaid,
+        confirmations: typeof confirmations === 'number' && !isNaN(confirmations) ? confirmations : payment.confirmations,
         hash: ipnData.source_transaction_hash || payment.hash,
       },
     });
