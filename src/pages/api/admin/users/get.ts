@@ -9,18 +9,23 @@ function isAdminRank(rank: unknown): boolean {
   return r === 'admin' || r === 'owner'
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   if (req.method !== 'GET') {
     return res.status(405).json({ message: 'Method Not Allowed' })
   }
 
   const session = await getServerSession(req, res, authOptions)
   const rank = (session?.user as { rank?: string } | undefined)?.rank
+
   if (!session?.user || !isAdminRank(rank)) {
     return res.status(403).json({ message: 'Forbidden' })
   }
 
   const username = String(req.query.username ?? '').trim()
+
   if (!username) {
     return res.status(400).json({ message: 'username is required' })
   }
@@ -36,6 +41,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       balance: true,
       premium: true,
       apiAccess: true,
+
+      // Login tracking
+      lastIp: true,
+      lastLoginAt: true,
     },
   })
 
@@ -44,6 +53,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   const banInfo = getBanInfo(user.username)
+
   return res.status(200).json({
     user,
     moderation: {
@@ -54,4 +64,3 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     },
   })
 }
-
