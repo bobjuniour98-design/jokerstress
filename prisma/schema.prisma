@@ -91,6 +91,7 @@ model News {
   date    DateTime @default(now())
 }
 
+
 model Payment {
   id              String    @id @default(cuid())
   uniqID          String?   @unique
